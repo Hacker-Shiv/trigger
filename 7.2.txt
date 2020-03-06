@@ -1,0 +1,42 @@
+Create table emp_log(id number(5), name varchar(10), dn number(5), salary number(10));
+create table dept_log(dn number(5), dname varchar(10) tsalary number(10));
+insert into empl_log values(01, 'abc', 11, 15000);
+insert into empl_log values(02, 'def', 12, 12000);
+insert into empl_log values(03, 'ghi', 13, 11000);
+insert into dept_log values(01, 11, 'MCA', 15000);
+insert into dept_log values(02, 12, 'MBA', 12000);
+insert into dept_log values(03, 13, 'MTM', 11000);
+
+
+
+# insert
+create or replace
+trigger t1 after insert on emp_log
+for each row
+begin
+update dept_log set tsalary=tsalary+:new.salary where dn =:new.dn;
+end;
+/
+insert into emp_log values(04, 'jkl', 11, 11000);
+
+#update
+create or replace
+trigger t2 before update on emp_log
+for each row
+begin
+update dept_log set tsalary=(tsalary+:new.salary-:old.salary) where dn =:new.dn;
+end;
+/
+
+update emp_log set salary=15000 where id=4;
+
+#delete
+create or replace
+trigger t2 before delete on emp_log
+for each row
+begin
+update dept_log set tsalary=tsalary-:old.salary;
+end;
+/
+
+detete from emp_log where id=4;
